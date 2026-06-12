@@ -56,12 +56,21 @@ export const Details = () => {
         <div className="row text-danger text-center">
           {Object.entries(details)
             .filter(([key]) => key !== "created" && key !== "edited" && key !== "url")
-            .map(([key, value]) => (
-              <div className="col" key={key}>
-                <h5>{key.replaceAll("_", " ")}</h5>
-                <p>{value}</p>
-              </div>
-            ))}
+            .map(([key, value]) => {
+              if (
+                Array.isArray(value) &&
+                value.every(item => typeof item === "string" && item.startsWith("http"))
+              ) {
+                return null;
+              }
+
+              return (
+                <div className="col" key={key}>
+                  <h5>{key.replaceAll("_", " ")}</h5>
+                  <p>{value}</p>
+                </div>
+              );
+            })}
         </div>
 
         <Link to="/" className="btn btn-primary mt-4">
